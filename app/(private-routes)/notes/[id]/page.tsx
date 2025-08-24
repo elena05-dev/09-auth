@@ -3,10 +3,10 @@ import {
   HydrationBoundary,
   dehydrate,
 } from '@tanstack/react-query';
-import { fetchNoteById } from '@/lib/api/clientApi';
+import { getNoteByIdServer } from '@/lib/api/serverApi';
 import NoteDetailsClient from './NoteDetails.client';
 import type { Metadata } from 'next';
-import type { Note } from '@/lib/api/clientApi';
+import type { Note } from '@/types/note';
 
 type PageProps = {
   params: Promise<{ id: string }>;
@@ -17,7 +17,7 @@ export async function generateMetadata({
 }: PageProps): Promise<Metadata> {
   const { id: noteId } = await params;
 
-  const note: Note | null = await fetchNoteById(noteId);
+  const note: Note | null = await getNoteByIdServer(noteId);
 
   return {
     title: `NoteHub : ${note.title}`,
@@ -25,7 +25,7 @@ export async function generateMetadata({
     openGraph: {
       title: `NoteHub : ${note.title}`,
       description: note.content.slice(0, 160),
-      url: `https://08-zustand-ibkv.vercel.app/notes/${noteId}`,
+      url: `https://09-zapp/notes/${noteId}`,
       images: [
         {
           url: 'https://ac.goit.global/fullstack/react/notehub-og-meta.jpg',
@@ -46,7 +46,7 @@ export default async function NoteDetailsPage({ params }: PageProps) {
 
   await queryClient.prefetchQuery({
     queryKey: ['note', noteId],
-    queryFn: () => fetchNoteById(noteId),
+    queryFn: () => getNoteByIdServer(noteId),
   });
 
   return (

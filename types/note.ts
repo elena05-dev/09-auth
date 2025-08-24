@@ -14,7 +14,7 @@ export interface Note {
   createdAt: string;
   updatedAt: string;
 }
-// Добавляем интерфейсы для API
+
 export interface FetchNotesParams {
   page?: number;
   perPage?: number;
@@ -27,8 +27,16 @@ export interface FetchNotesResponse {
   totalPages: number;
 }
 
-export interface CreateNotePayload {
+// Інтерфейс для створення нотатки
+export interface CreateNoteData {
   title: string;
   content: string;
   tag: NoteTag;
+}
+
+// Інтерфейс для оновлення нотатки
+export interface UpdateNoteData {
+  title?: string;
+  content?: string;
+  tag?: NoteTag;
 }

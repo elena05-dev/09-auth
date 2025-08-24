@@ -1,90 +1,86 @@
 'use client';
 
-import { useState } from 'react';
-import {
-  useQuery,
-  UseQueryResult,
-  keepPreviousData,
-} from '@tanstack/react-query';
-import { useDebounce } from '@/hooks/useDebouncedValue';
-import type { Note } from '@/types/note';
-import { fetchNotes, type FetchNotesResponse } from '@/lib/api/clientApi';
+import React, { useEffect, useState } from 'react';
+import { useQuery, keepPreviousData } from '@tanstack/react-query';
+import { useDebounce } from 'use-debounce';
+import { getNotesClient } from '@/lib/api/clientApi';
 import NoteList from '@/components/NoteList/NoteList';
-import SearchBox from '@/components/SearchBox/SearchBox';
 import Pagination from '@/components/Pagination/Pagination';
-import css from './NotesPage.module.css';
-import ToastContainer from '@/components/ToastContainer/ToastContainer';
+import SearchBox from '@/components/SearchBox/SearchBox';
 import Link from 'next/link';
+import css from './NotesPage.module.css';
+import { Note } from '@/types/note';
 
 interface NotesClientProps {
-  initialNotes: Note[];
-  initialTotalPages: number;
-  tag: string;
+  initialData: { notes: Note[]; totalPages: number };
+  initialTag: string;
 }
 
 export default function NotesClient({
-  initialNotes,
-  initialTotalPages,
-  tag,
+  initialData,
+  initialTag,
 }: NotesClientProps) {
-  const [search, setSearch] = useState('');
-  const debouncedSearch = useDebounce(search, 500);
   const [page, setPage] = useState(1);
+  const [search, setSearch] = useState('');
+  const [debouncedSearch] = useDebounce(search, 500);
+  const [tag, setTag] = useState(initialTag);
 
-  const {
-    data,
-    isLoading,
-    isError,
-    error,
-  }: UseQueryResult<FetchNotesResponse, Error> = useQuery<FetchNotesResponse>({
-    queryKey: ['notes', debouncedSearch, page, tag],
-    queryFn: () => fetchNotes(debouncedSearch, page, tag),
-    initialData: {
-      notes: initialNotes,
-      totalPages: initialTotalPages,
-    },
+  useEffect(() => {
+    setTag(initialTag);
+    setPage(1);
+  }, [initialTag]);
+
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['notes', page, debouncedSearch, tag],
+    queryFn: () =>
+      getNotesClient({
+        page,
+        search: debouncedSearch,
+        tag: tag,
+      }),
     placeholderData: keepPreviousData,
+    initialData,
+    refetchOnMount: false,
   });
+  console.log(data);
+  const handleSearchChange = (value: string) => {
+    setSearch(value);
+    setPage(1);
+  };
 
-  const notes = data?.notes || [];
-  const pageCount = data?.totalPages ?? 1;
-
-  if (isError && error) throw error;
+  const handlePageChange = ({ selected }: { selected: number }) => {
+    setPage(selected + 1);
+  };
 
   return (
     <div className={css.app}>
-      <ToastContainer />
-
       <header className={css.toolbar}>
-        <SearchBox
-          value={search}
-          onChange={(value) => {
-            setSearch(value);
-            setPage(1);
-          }}
-        />
-        {pageCount > 1 && (
-          <Pagination
-            totalPages={pageCount}
-            currentPage={page}
-            onPageChange={(nextPage: number) => setPage(nextPage)}
-          />
-        )}
+        <SearchBox value={search} onChange={handleSearchChange} />
         <Link href="/notes/action/create" className={css.button}>
           Create note +
         </Link>
       </header>
 
-      {isLoading && <p>Loading...</p>}
+      {error && (
+        <div className={css.error}>
+          Error:{' '}
+          {error instanceof Error ? error.message : 'Something went wrong'}
+        </div>
+      )}
 
-      {!isLoading && !isError && (
+      {data?.notes?.length ? (
         <>
-          {notes.length > 0 ? (
-            <NoteList notes={notes} />
-          ) : (
-            <p>No notes found.</p>
+          <NoteList notes={data.notes} />
+          {data.totalPages > 1 && (
+            <Pagination
+              pageCount={data.totalPages}
+              onPageChange={handlePageChange}
+              currentPage={page - 1}
+            />
           )}
         </>
+      ) : (
+        !isLoading && <div className={css.noNotes}>No notes found</div>
       )}
     </div>
   );

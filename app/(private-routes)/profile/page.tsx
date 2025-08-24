@@ -1,8 +1,9 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import css from '@/components/Profile/ProfilePage.module.css';
-import { getServerMe } from '@/lib/api/serverApi';
+import { getCurrentUserServer } from '@/lib/api/serverApi';
 import type { Metadata } from 'next';
+import type { User } from '@/types/user';
 
 export const metadata: Metadata = {
   title: 'User Profile - MyApp',
@@ -13,7 +14,7 @@ export const metadata: Metadata = {
     title: 'User Profile - MyApp',
     description:
       'View and manage your personal profile, settings, and preferences on MyApp.',
-    url: 'https://09-auth-livid.vercel.app/',
+    url: 'https://09-auth/',
     siteName: 'MyApp',
     images: [
       {
@@ -26,7 +27,11 @@ export const metadata: Metadata = {
   },
 };
 export default async function ProfilePage() {
-  const user = await getServerMe();
+  const user: User | null = await getCurrentUserServer();
+
+  if (!user) {
+    return <p>User not found or not authenticated</p>;
+  }
 
   return (
     <main className={css.mainContent}>
@@ -39,7 +44,7 @@ export default async function ProfilePage() {
         </div>
         <div className={css.avatarWrapper}>
           <Image
-            src={user.avatar}
+            src={user.avatar || '/default-avatar.png'}
             alt="User Avatar"
             width={120}
             height={120}
@@ -47,7 +52,7 @@ export default async function ProfilePage() {
           />
         </div>
         <div className={css.profileInfo}>
-          <p>Username: {user.username || user?.email.split('@')[0]}</p>
+          <p>Username: {user.username}</p>
           <p>Email: {user.email}</p>
         </div>
       </div>

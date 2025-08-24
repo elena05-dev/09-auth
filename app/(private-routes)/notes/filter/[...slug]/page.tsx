@@ -8,10 +8,10 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const tagFromUrl = slug[0] || 'All';
+  const tag = slug?.[0]?.toLowerCase() === 'All' ? undefined : slug?.[0];
 
-  const title = `Notes filtered by: ${tagFromUrl} — NoteHub`;
-  const description = `Browse your notes filtered by "${tagFromUrl}" in NoteHub. Quickly find the ideas and tasks you need.`;
+  const title = `Notes filtered by: ${tag} — NoteHub`;
+  const description = `Browse your notes filtered by "${tag}" in NoteHub. Quickly find the ideas and tasks you need.`;
 
   return {
     title,
@@ -19,29 +19,22 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       title,
       description,
-      url: `https://09-auth-livid.vercel.app/notes/filter/${tagFromUrl}`,
+      url: `https://09-auth/${tag}`,
       images: [
         {
           url: 'https://ac.goit.global/fullstack/react/notehub-og-meta.jpg',
           width: 1200,
           height: 630,
-          alt: `Notes filtered by ${tagFromUrl}`,
+          alt: `Notes filtered by ${tag}`,
         },
       ],
     },
   };
 }
 
-export default async function Notes({ params }: Props) {
+export default async function NotesPage({ params }: Props) {
   const { slug } = await params;
-  const tagFromUrl = slug[0] === 'All' ? '' : slug[0];
-  const initialData = await fetchNotes('', 1, tagFromUrl);
-
-  return (
-    <NotesClient
-      initialNotes={initialData.notes}
-      initialTotalPages={initialData.totalPages}
-      tag={tagFromUrl}
-    />
-  );
+  const tag = slug[0] === 'All' ? '' : slug?.[0];
+  const rawData = await fetchNotes('', 1, tag);
+  return <NotesClient initialData={rawData} initialTag={tag} />;
 }
