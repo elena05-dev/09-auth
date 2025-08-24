@@ -1,15 +1,7 @@
 import axios from 'axios';
 import type { Note, NoteTag } from '../types/note';
 
-const BASE_URL = 'https://notehub-public.goit.study/api';
-const NEXT_PUBLIC_NOTEHUB_TOKEN = process.env.NEXT_PUBLIC_NOTEHUB_TOKEN;
-
-const instance = axios.create({
-  baseURL: BASE_URL,
-  headers: {
-    Authorization: `Bearer ${NEXT_PUBLIC_NOTEHUB_TOKEN}`,
-  },
-});
+axios.defaults.baseURL = 'http://localhost:3000/api';
 
 export type { Note, NoteTag };
 
@@ -40,7 +32,7 @@ export async function fetchNotes(
       delete cleanParams.search;
     }
 
-    const { data } = await instance.get<{ notes: Note[]; totalPages: number }>(
+    const { data } = await axios.get<{ notes: Note[]; totalPages: number }>(
       '/notes',
       { params: cleanParams },
     );
@@ -59,7 +51,7 @@ export async function fetchNotes(
 
 export async function fetchNoteById(id: string): Promise<Note> {
   try {
-    const { data } = await instance.get<Note>(`/notes/${id}`);
+    const { data } = await axios.get<Note>(`/notes/${id}`);
     return data;
   } catch (error: unknown) {
     if (error instanceof Error) {
@@ -71,7 +63,7 @@ export async function fetchNoteById(id: string): Promise<Note> {
 
 export async function createNote(note: CreateNotePayload): Promise<Note> {
   try {
-    const { data } = await instance.post<Note>('/notes', note);
+    const { data } = await axios.post<Note>('/notes', note);
     return data;
   } catch (error: unknown) {
     if (error instanceof Error) {
@@ -83,7 +75,7 @@ export async function createNote(note: CreateNotePayload): Promise<Note> {
 
 export async function deleteNote(id: string): Promise<Note> {
   try {
-    const { data } = await instance.delete<Note>(`/notes/${id}`);
+    const { data } = await axios.delete<Note>(`/notes/${id}`);
     return data;
   } catch (error: unknown) {
     if (error instanceof Error) {

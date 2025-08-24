@@ -1,5 +1,5 @@
 {
-  "name": "08-zustand",
+  "name": "09-auth",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -13,11 +13,13 @@
     "@tanstack/react-query-devtools": "^5.85.3",
     "axios": "^1.11.0",
     "clsx": "^2.1.1",
+    "cookie": "^1.0.2",
     "formik": "^2.4.6",
-    "next": "15.4.4",
+    "next": "^15.4.4",
+    "paginate": "^0.2.0",
     "react": "^19.1.0",
     "react-dom": "19.1.0",
-    "react-hot-toast": "^2.5.2",
+    "react-hot-toast": "^2.6.0",
     "react-paginate": "^8.3.0",
     "use-debounce": "^10.0.5",
     "yup": "^1.7.0",
@@ -26,8 +28,8 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
+    "@types/react": "^19.1.10",
+    "@types/react-dom": "^19.1.7",
     "eslint": "^9",
     "eslint-config-next": "15.4.4",
     "eslint-config-prettier": "^10.1.8",
