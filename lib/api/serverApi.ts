@@ -2,6 +2,7 @@
 
 import axios from 'axios';
 import { cookies } from 'next/headers';
+import type { NoteTag } from '@/types/note';
 import { parse } from 'cookie';
 import type { User } from '@/types/user';
 import type { Note } from '@/types/note';
@@ -106,6 +107,18 @@ export async function checkSession(
   }
 }
 
+export interface FetchNotesParams {
+  page?: number;
+  perPage?: number;
+  search?: string;
+  tag?: NoteTag;
+}
+
+export interface FetchNotesResponse {
+  results: Note[];
+  totalPages: number;
+}
+
 export const fetchNotes = async (
   search: string,
   page: number,
@@ -127,7 +140,6 @@ export const fetchNotes = async (
   });
   return response.data;
 };
-
 export async function getNotesServer(): Promise<Note[]> {
   const cookieStore = await cookies();
   const cookieStr = cookieStore

@@ -100,9 +100,9 @@ export async function getNotesClient({
   const params: Record<string, string | number> = { page, perPage };
   if (search) params.search = search;
   if (tag) params.tag = tag;
-  console.log(params);
+
   const res = await nextServer.get<FetchNotesResponse>('/notes', { params });
-  console.log('res', res);
+
   return res.data;
 }
 

@@ -1,6 +1,7 @@
 import NotesClient from './Notes.client';
 import { fetchNotes } from '@/lib/api/serverApi';
 import { Metadata } from 'next';
+import type { NoteTag } from '@/types/note';
 
 type Props = {
   params: Promise<{ slug: string[] }>;
@@ -8,10 +9,12 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const tag = slug?.[0]?.toLowerCase() === 'All' ? undefined : slug?.[0];
+  const rawTag = slug?.[0];
+  const tag: NoteTag | undefined =
+    rawTag === 'All' ? undefined : (rawTag as NoteTag);
 
-  const title = `Notes filtered by: ${tag} — NoteHub`;
-  const description = `Browse your notes filtered by "${tag}" in NoteHub. Quickly find the ideas and tasks you need.`;
+  const title = `Notes filtered by: ${tag ?? 'All'} — NoteHub`;
+  const description = `Browse your notes filtered by "${tag ?? 'All'}" in NoteHub. Quickly find the ideas and tasks you need.`;
 
   return {
     title,
@@ -19,13 +22,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       title,
       description,
-      url: `https://09-auth/${tag}`,
+      url: `https://09-auth/notes/filter/${tag ?? 'all'}`,
       images: [
         {
           url: 'https://ac.goit.global/fullstack/react/notehub-og-meta.jpg',
           width: 1200,
           height: 630,
-          alt: `Notes filtered by ${tag}`,
+          alt: `Notes filtered by ${tag ?? 'All'}`,
         },
       ],
     },

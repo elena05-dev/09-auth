@@ -1,47 +1,49 @@
 'use client';
-
+import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/lib/store/authStore';
-import Link from 'next/link';
 import css from './AuthNavigation.module.css';
+import Link from 'next/link';
+import { logoutUser } from '@/lib/api/clientApi';
 
 export default function AuthNavigation() {
-  const { user, isAuthenticated, clearUser } = useAuthStore();
+  const router = useRouter();
+  const { user, isAuthenticated, clearAuth } = useAuthStore();
 
-  const handleLogout = () => {
-    clearUser();
-    window.location.href = '/sign-in';
+  const handleLogout = async () => {
+    try {
+      await logoutUser();
+    } catch (err) {
+      console.error('Ошибка при выходе:', err);
+    } finally {
+      clearAuth();
+      router.push('/sign-in');
+    }
   };
 
   return (
-    <ul className={css.navigationList}>
+    <div className={css.authContainer}>
       {isAuthenticated ? (
         <>
-          <li className={css.navigationItem}>
-            <Link href="/profile" className={css.navigationLink}>
-              Profile
-            </Link>
-          </li>
-          <li className={css.navigationItem}>
+          <Link href="/profile" className={css.navigationLink}>
+            Profile
+          </Link>
+          <div className={css.userBlock}>
             <p className={css.userEmail}>{user?.email}</p>
             <button className={css.logoutButton} onClick={handleLogout}>
               Logout
             </button>
-          </li>
+          </div>
         </>
       ) : (
         <>
-          <li className={css.navigationItem}>
-            <Link href="/sign-in" className={css.navigationLink}>
-              Login
-            </Link>
-          </li>
-          <li className={css.navigationItem}>
-            <Link href="/sign-up" className={css.navigationLink}>
-              Sign Up
-            </Link>
-          </li>
+          <Link href="/sign-in" className={css.navigationLink}>
+            Login
+          </Link>
+          <Link href="/sign-up" className={css.navigationLink}>
+            Sign up
+          </Link>
         </>
       )}
-    </ul>
+    </div>
   );
 }

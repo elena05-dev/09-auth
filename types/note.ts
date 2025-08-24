@@ -27,14 +27,13 @@ export interface FetchNotesResponse {
   totalPages: number;
 }
 
-// Інтерфейс для створення нотатки
 export interface CreateNoteData {
   title: string;
   content: string;
   tag: NoteTag;
+  createdAt?: string;
 }
 
-// Інтерфейс для оновлення нотатки
 export interface UpdateNoteData {
   title?: string;
   content?: string;
