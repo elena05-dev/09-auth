@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     title: 'HubNotes | Create Note',
     description:
       'Create a new note in HubNotes. Add a title, content, and tag to keep your thoughts organized.',
-    url: 'http://localhost:3000/notes/action/create',
+    url: 'https://09-auth-azure-eight.vercel.app/',
     images: [
       {
         url: 'https://ac.goit.global/fullstack/react/notehub-og-meta.jpg',

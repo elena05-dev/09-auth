@@ -14,7 +14,7 @@ export const metadata: Metadata = {
     title: 'User Profile - MyApp',
     description:
       'View and manage your personal profile, settings, and preferences on MyApp.',
-    url: 'https://09-auth/',
+    url: 'https://09-auth-azure-eight.vercel.app/',
     siteName: 'MyApp',
     images: [
       {
