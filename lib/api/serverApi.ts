@@ -6,7 +6,12 @@ import type { NoteTag } from '@/types/note';
 import { parse } from 'cookie';
 import type { User } from '@/types/user';
 import type { Note } from '@/types/note';
-import { nextServer } from './api';
+
+export const nextServer = axios.create({
+  baseURL: 'https://notehub-api.goit.study', // реальный бэкенд
+  headers: { 'Content-Type': 'application/json' },
+  withCredentials: true,
+});
 
 export async function getCurrentUserServer(): Promise<User | null> {
   try {
