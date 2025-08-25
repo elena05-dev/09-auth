@@ -6,10 +6,11 @@ import type { User } from '@/types/user';
 import type { Note } from '@/types/note';
 import { useAuthStore } from '@/lib/store/authStore';
 import type { CreateNoteData } from '@/types/note';
+import api from 'axios';
 
 export async function getCurrentUser(): Promise<User | null> {
   try {
-    const { data } = await nextServer.get<User>('/auth/session');
+    const { data } = await api.get<User>('/auth/session');
     if (data) useAuthStore.getState().setAuth?.(data);
     return data;
   } catch {
@@ -49,19 +50,26 @@ export async function loginUser(
   password: string,
 ): Promise<User> {
   try {
-    await nextServer.post('/auth/login', { email, password });
+    const res = await fetch('/api/auth/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, password }),
+      credentials: 'include', // чтобы браузер принимал куки
+    });
 
-    const user = await getCurrentUser();
-    if (!user) throw new Error('Failed to fetch user data after login');
-    return user;
-  } catch (error) {
-    if (axios.isAxiosError(error) && error.response?.status === 401) {
-      throw new Error('Invalid email or password');
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.error || 'Failed to login');
     }
+
+    const data: User = await res.json();
+    return data;
+  } catch (error) {
     throw error;
   }
 }
-
 export async function logoutUser(): Promise<void> {
   try {
     await nextServer.post('/auth/logout');
@@ -96,7 +104,7 @@ export async function getNotesClient({
 }: FetchNotesParams = {}): Promise<FetchNotesResponse> {
   const params: Record<string, string | number> = { page, perPage };
   if (search) params.search = search;
-  if (tag) params.tag = tag;
+  if (tag && tag !== 'All') params.tag = tag;
 
   const res = await nextServer.get<FetchNotesResponse>('/notes', { params });
 
