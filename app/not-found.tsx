@@ -9,7 +9,7 @@ export const metadata: Metadata = {
     title: 'not-found',
     description:
       'The page you are looking for does not exist or may have been moved',
-    url: 'https://09-app/not-found',
+    url: 'https://09-auth-azure-eight.vercel.app/',
     images: [
       {
         url: 'https://ac.goit.global/fullstack/react/og-meta.jpg',
