@@ -43,7 +43,8 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
+
     const body = await request.json();
 
     const res = await api.post('/notes', body, {
@@ -59,78 +60,7 @@ export async function POST(request: NextRequest) {
       logErrorResponse(error.response?.data);
       return NextResponse.json(
         { error: error.message, response: error.response?.data },
-        { status: error.status ?? 500 },
-      );
-    }
-    logErrorResponse({ message: (error as Error).message });
-    return NextResponse.json(
-      { error: 'Internal Server Error' },
-      { status: 500 },
-    );
-  }
-}
-
-export async function DELETE(request: NextRequest) {
-  try {
-    const cookieStore = cookies();
-    const id = request.nextUrl.searchParams.get('id');
-    if (!id) {
-      return NextResponse.json(
-        { error: 'Note ID is required' },
-        { status: 400 },
-      );
-    }
-
-    const res = await api.delete(`/notes/${id}`, {
-      headers: {
-        Cookie: cookieStore.toString(),
-      },
-    });
-
-    return NextResponse.json(res.data, { status: res.status });
-  } catch (error) {
-    if (isAxiosError(error)) {
-      logErrorResponse(error.response?.data);
-      return NextResponse.json(
-        { error: error.message, response: error.response?.data },
-        { status: error.status ?? 500 },
-      );
-    }
-    logErrorResponse({ message: (error as Error).message });
-    return NextResponse.json(
-      { error: 'Internal Server Error' },
-      { status: 500 },
-    );
-  }
-}
-
-export async function PATCH(request: NextRequest) {
-  try {
-    const cookieStore = cookies();
-    const id = request.nextUrl.searchParams.get('id');
-    if (!id) {
-      return NextResponse.json(
-        { error: 'Note ID is required' },
-        { status: 400 },
-      );
-    }
-
-    const body = await request.json();
-
-    const res = await api.patch(`/notes/${id}`, body, {
-      headers: {
-        Cookie: cookieStore.toString(),
-        'Content-Type': 'application/json',
-      },
-    });
-
-    return NextResponse.json(res.data, { status: res.status });
-  } catch (error) {
-    if (isAxiosError(error)) {
-      logErrorResponse(error.response?.data);
-      return NextResponse.json(
-        { error: error.message, response: error.response?.data },
-        { status: error.status ?? 500 },
+        { status: error.status },
       );
     }
     logErrorResponse({ message: (error as Error).message });

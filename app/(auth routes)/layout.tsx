@@ -1,6 +1,14 @@
-// app/(auth-routes)/layout.tsx
-import { ReactNode } from 'react';
+'use client';
 
-export default function AuthLayout({ children }: { children: ReactNode }) {
-  return <div>{children}</div>;
+import { ReactNode, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+
+export default function AuthProvider({ children }: { children: ReactNode }) {
+  const router = useRouter();
+
+  useEffect(() => {
+    router.refresh();
+  }, [router]);
+
+  return <>{children}</>;
 }

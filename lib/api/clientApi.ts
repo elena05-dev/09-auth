@@ -28,10 +28,7 @@ export async function checkSession(): Promise<boolean> {
   }
 }
 
-export async function registerUser(
-  email: string,
-  password: string,
-): Promise<User> {
+export async function register(email: string, password: string): Promise<User> {
   try {
     const { data } = await nextServer.post<User>('/auth/register', {
       email,

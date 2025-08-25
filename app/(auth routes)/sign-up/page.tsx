@@ -1,7 +1,8 @@
 'use client';
+
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { registerUser } from '@/lib/api/clientApi';
+import { register } from '@/lib/api/clientApi';
 import { useAuthStore } from '@/lib/store/authStore';
 import css from './SignUpPage.module.css';
 
@@ -17,7 +18,7 @@ export default function SignUpPage() {
       const email = formData.get('email') as string;
       const password = formData.get('password') as string;
 
-      const user = await registerUser(email, password);
+      const user = await register(email, password);
       setAuth(user);
       router.push('/profile');
     } catch (err) {

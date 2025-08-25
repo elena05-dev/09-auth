@@ -32,14 +32,11 @@ export async function GET(request: NextRequest) {
         if (accessToken) cookieStore.set('accessToken', accessToken);
         if (refreshToken) cookieStore.set('refreshToken', refreshToken);
 
-        return NextResponse.redirect(
-          new URL('/api/auth/refresh?next=...', request.url),
-          {
-            headers: {
-              'set-cookie': cookieStore.toString(),
-            },
+        return NextResponse.redirect(new URL(next, request.url), {
+          headers: {
+            'set-cookie': cookieStore.toString(),
           },
-        );
+        });
       }
     }
     return NextResponse.redirect(new URL('/sign-in', request.url));

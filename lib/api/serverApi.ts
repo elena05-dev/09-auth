@@ -44,7 +44,7 @@ export async function updateUserProfileServer(
   return response.data;
 }
 
-export async function checkSessionServer() {
+export async function checkServerSession() {
   const cookieStore = await cookies();
   const cookieStr = cookieStore
     .getAll()
@@ -119,6 +119,18 @@ export interface FetchNotesResponse {
   totalPages: number;
 }
 
+export async function getCookiesHeader(): Promise<string> {
+  const cookieStore = await cookies();
+  const cookieStr = cookieStore
+    .getAll()
+    .map(
+      ({ name, value }: { name: string; value: string }) => `${name}=${value}`,
+    )
+    .join('; ');
+
+  return cookieStr;
+}
+
 export const fetchNotes = async (
   search: string,
   page: number,
@@ -140,6 +152,7 @@ export const fetchNotes = async (
   });
   return response.data;
 };
+
 export async function getNotesServer(): Promise<Note[]> {
   const cookieStore = await cookies();
   const cookieStr = cookieStore
