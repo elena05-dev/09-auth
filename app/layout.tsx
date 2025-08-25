@@ -14,11 +14,11 @@ const roboto = Roboto({
 });
 
 export const metadata: Metadata = {
-  title: '08-zustand',
+  title: '09-auth',
   description:
     'An application for storing, creating, deleting, and searching notes',
   openGraph: {
-    title: '08-zustand',
+    title: '09-auth',
     description:
       'An application for storing, creating, deleting, and searching notes',
     url: `https://09-auth-azure-eight.vercel.app/`,
