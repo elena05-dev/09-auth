@@ -1,6 +1,6 @@
 'use client';
 
-import { nextClient } from './api';
+import { nextServer } from './api';
 import axios from 'axios';
 import type { User } from '@/types/user';
 import type { Note } from '@/types/note';
@@ -21,7 +21,7 @@ export async function getCurrentUser(): Promise<User | null> {
 
 export async function checkSession(): Promise<boolean> {
   try {
-    const response = await nextClient.get('/auth/session');
+    const response = await nextServer.get('/api/auth/session');
 
     return response.data?.success === true;
   } catch {
@@ -31,7 +31,7 @@ export async function checkSession(): Promise<boolean> {
 
 export async function register(email: string, password: string): Promise<User> {
   try {
-    const { data } = await nextClient.post<User>('/auth/register', {
+    const { data } = await nextServer.post<User>('/auth/register', {
       email,
       password,
     });
@@ -50,36 +50,29 @@ export async function loginUser(
   password: string,
 ): Promise<User> {
   try {
-    const res = await fetch('/api/auth/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email, password }),
-      credentials: 'include', // чтобы браузер принимал куки
-    });
+    await nextServer.post('/auth/login', { email, password });
 
-    if (!res.ok) {
-      const err = await res.json();
-      throw new Error(err.error || 'Failed to login');
-    }
-
-    const data: User = await res.json();
-    return data;
+    const user = await getCurrentUser();
+    if (!user)
+      throw new Error('Не удалось получить данные пользователя после логина');
+    return user;
   } catch (error) {
+    if (axios.isAxiosError(error) && error.response?.status === 401) {
+      throw new Error('Неверный email или пароль');
+    }
     throw error;
   }
 }
 export async function logoutUser(): Promise<void> {
   try {
-    await nextClient.post('/auth/logout');
+    await nextServer.post('/auth/logout');
   } finally {
     useAuthStore.getState().clearAuth?.();
   }
 }
 
 export async function updateUserProfile(updates: Partial<User>): Promise<User> {
-  const { data } = await nextClient.patch<User>('/users/me', updates);
+  const { data } = await nextServer.patch<User>('/users/me', updates);
   useAuthStore.getState().setAuth?.(data);
   return data;
 }
@@ -106,22 +99,22 @@ export async function getNotesClient({
   if (search) params.search = search;
   if (tag && tag !== 'All') params.tag = tag;
 
-  const res = await nextClient.get<FetchNotesResponse>('/notes', { params });
+  const res = await nextServer.get<FetchNotesResponse>('/notes', { params });
 
   return res.data;
 }
 
 export async function getNoteById(id: string): Promise<Note> {
-  const { data } = await nextClient.get<Note>(`/notes/${id}`);
+  const { data } = await nextServer.get<Note>(`/notes/${id}`);
   return data;
 }
 
 export async function createNote(note: CreateNoteData): Promise<Note> {
-  const { data } = await nextClient.post<Note>('/notes', note);
+  const { data } = await nextServer.post<Note>('/notes', note);
   return data;
 }
 
 export async function deleteNote(id: string): Promise<Note | null> {
-  const { data } = await nextClient.delete<Note>(`/notes/${id}`);
+  const { data } = await nextServer.delete<Note>(`/notes/${id}`);
   return data ?? null;
 }

@@ -42,6 +42,7 @@ export default function EditProfilePage() {
         <h1 className={css.formTitle}>Edit Profile</h1>
 
         <div className={css.avatarWrapper}>
+          console.log(user?.avatar)
           <Image
             src={user?.avatar || '/default-avatar.png'}
             alt="User Avatar"

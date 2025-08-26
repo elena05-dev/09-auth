@@ -25,10 +25,12 @@ export async function middleware(req: NextRequest) {
 
   const session = await checkSession(accessToken, refreshToken);
 
+  // Якщо неавторизований — доступ заборонено до приватних сторінок
   if (!session.valid && isPrivatePage) {
     return NextResponse.redirect(new URL('/sign-in', req.url));
   }
 
+  // Якщо авторизований — не може відкривати auth-сторінки
   if (session.valid && isAuthPage) {
     return NextResponse.redirect(new URL('/profile', req.url));
   }

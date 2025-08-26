@@ -1,17 +1,12 @@
 'use server';
 
+import { nextServer } from './api';
 import axios from 'axios';
 import { cookies } from 'next/headers';
 import type { NoteTag } from '@/types/note';
 import { parse } from 'cookie';
 import type { User } from '@/types/user';
 import type { Note } from '@/types/note';
-
-export const nextServer = axios.create({
-  baseURL: 'https://notehub-api.goit.study', // реальный бэкенд
-  headers: { 'Content-Type': 'application/json' },
-  withCredentials: true,
-});
 
 export async function getCurrentUserServer(): Promise<User | null> {
   try {
@@ -120,7 +115,7 @@ export interface FetchNotesParams {
 }
 
 export interface FetchNotesResponse {
-  results: Note[];
+  notes: Note[];
   totalPages: number;
 }
 
@@ -140,21 +135,25 @@ export const fetchNotes = async (
   search: string,
   page: number,
   tag: string | undefined,
-) => {
+): Promise<FetchNotesResponse> => {
   const cookieStore = await cookies();
-  const params = {
+
+  const params: Record<string, string | number> = {
     ...(search && { search }),
-    tag,
+    ...(tag && tag !== 'all' ? { tag } : {}),
     page,
     perPage: 12,
   };
+
   const headers = {
     Cookie: cookieStore.toString(),
   };
-  const response = await nextServer.get('/notes', {
+
+  const response = await nextServer.get<FetchNotesResponse>('/notes', {
     params,
     headers,
   });
+
   return response.data;
 };
 
