@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     siteName: 'MyApp',
     images: [
       {
-        url: 'https://ac.goit.global/fullstack/react/notehub-og-meta.jpg',
+        url: 'https://ac.goit.global/fullstack/react/default-avatar.jpg',
         width: 1200,
         height: 630,
         alt: 'Profile page preview',
@@ -44,7 +44,7 @@ export default async function ProfilePage() {
         </div>
         <div className={css.avatarWrapper}>
           <Image
-            src={user.avatar || '/default-avatar.png'}
+            src={user.avatar || '/user.png'}
             alt="User Avatar"
             width={120}
             height={120}

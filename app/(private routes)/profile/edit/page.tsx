@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Image from 'next/image';
 import { useAuthStore } from '@/lib/store/authStore';
 import { updateUserProfile } from '@/lib/api/clientApi';
 import css from '@/components/Profile/EditProfilePage.module.css';
@@ -40,17 +39,6 @@ export default function EditProfilePage() {
     <main className={css.mainContent}>
       <div className={css.profileCard}>
         <h1 className={css.formTitle}>Edit Profile</h1>
-
-        <div className={css.avatarWrapper}>
-          console.log(user?.avatar)
-          <Image
-            src={user?.avatar || '/default-avatar.png'}
-            alt="User Avatar"
-            width={120}
-            height={120}
-            className={css.avatar}
-          />
-        </div>
 
         <form onSubmit={handleSave} className={css.profileInfo}>
           <div className={css.usernameWrapper}>

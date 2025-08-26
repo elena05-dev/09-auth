@@ -6,26 +6,19 @@ import type { User } from '@/types/user';
 import type { Note } from '@/types/note';
 import { useAuthStore } from '@/lib/store/authStore';
 import type { CreateNoteData } from '@/types/note';
-import api from 'axios';
 
-export async function getCurrentUser(): Promise<User | null> {
+export async function fetchCurrentUser(): Promise<User | null> {
   try {
-    const { data } = await api.get<User>('/auth/session');
-    if (data) useAuthStore.getState().setAuth?.(data);
-    return data;
+    const { data } = await nextServer.get<User>('/auth/session');
+    if (data) {
+      useAuthStore.getState().setAuth?.(data);
+      return data;
+    }
+    useAuthStore.getState().clearAuth?.();
+    return null;
   } catch {
     useAuthStore.getState().clearAuth?.();
     return null;
-  }
-}
-
-export async function checkSession(): Promise<boolean> {
-  try {
-    const response = await nextServer.get('/api/auth/session');
-
-    return response.data?.success === true;
-  } catch {
-    return false;
   }
 }
 
@@ -52,17 +45,17 @@ export async function loginUser(
   try {
     await nextServer.post('/auth/login', { email, password });
 
-    const user = await getCurrentUser();
-    if (!user)
-      throw new Error('Не удалось получить данные пользователя после логина');
+    const user = await fetchCurrentUser();
+    if (!user) throw new Error('Failed to fetch user data after login');
     return user;
   } catch (error) {
     if (axios.isAxiosError(error) && error.response?.status === 401) {
-      throw new Error('Неверный email или пароль');
+      throw new Error('Invalid email or password');
     }
     throw error;
   }
 }
+
 export async function logoutUser(): Promise<void> {
   try {
     await nextServer.post('/auth/logout');
@@ -96,8 +89,10 @@ export async function getNotesClient({
   perPage = 12,
 }: FetchNotesParams = {}): Promise<FetchNotesResponse> {
   const params: Record<string, string | number> = { page, perPage };
+
   if (search) params.search = search;
-  if (tag && tag !== 'All') params.tag = tag;
+
+  if (tag && tag.toLowerCase() !== 'all') params.tag = tag;
 
   const res = await nextServer.get<FetchNotesResponse>('/notes', { params });
 

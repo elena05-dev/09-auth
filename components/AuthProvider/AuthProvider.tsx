@@ -3,7 +3,7 @@
 import { ReactNode, useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { useAuthStore } from '@/lib/store/authStore';
-import { getCurrentUser, checkSession } from '@/lib/api/clientApi';
+import { fetchCurrentUser } from '@/lib/api/clientApi';
 
 interface AuthProviderProps {
   children: ReactNode;
@@ -18,26 +18,24 @@ export default function AuthProvider({ children }: AuthProviderProps) {
   useEffect(() => {
     async function verifyAuth() {
       try {
-        const sessionValid = await checkSession();
+        const user = await fetchCurrentUser();
 
-        if (sessionValid) {
-          const user = await getCurrentUser();
-          if (user) {
-            setAuth(user);
-            if (
-              pathname.startsWith('/sign-in') ||
-              pathname.startsWith('/sign-up')
-            ) {
-              router.replace('/profile');
-            }
-          } else {
-            clearAuth();
+        if (user) {
+          setAuth(user);
+
+          if (
+            pathname.startsWith('/sign-in') ||
+            pathname.startsWith('/sign-up')
+          ) {
+            router.replace('/profile');
           }
         } else {
           clearAuth();
+
           if (pathname.startsWith('/profile')) router.replace('/sign-in');
         }
-      } catch {
+      } catch (error) {
+        console.error('Auth verification error:', error);
         clearAuth();
         if (pathname.startsWith('/profile')) router.replace('/sign-in');
       } finally {
@@ -46,8 +44,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     }
 
     verifyAuth();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pathname, router]);
+  }, [pathname, router, setAuth, clearAuth]);
 
   if (loading) return <p>Loading...</p>;
 
