@@ -9,13 +9,9 @@ import type { CreateNoteData } from '@/types/note';
 
 export async function fetchCurrentUser(): Promise<User | null> {
   try {
-    const { data } = await nextServer.get<User>('/auth/session');
-    if (data) {
-      useAuthStore.getState().setAuth?.(data);
-      return data;
-    }
-    useAuthStore.getState().clearAuth?.();
-    return null;
+    const { data } = await nextServer.get<User>('/users/me');
+    useAuthStore.getState().setAuth?.(data);
+    return data;
   } catch {
     useAuthStore.getState().clearAuth?.();
     return null;

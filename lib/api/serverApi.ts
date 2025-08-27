@@ -186,6 +186,8 @@ export async function getNotesWithPaginationServer(
   const params: Record<string, string | number> = { page, perPage };
   if (search) params.search = search;
   if (tag) params.tag = tag;
+  console.log('baseURL:', nextServer.defaults.baseURL);
+  console.log('params:', params);
 
   const response = await nextServer.get<Note[]>('/notes', {
     params,
