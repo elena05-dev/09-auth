@@ -28,7 +28,7 @@ export default function AuthNavigation() {
             Profile
           </Link>
           <div className={css.userBlock}>
-            <p className={css.userEmail}>{user?.email}</p>
+            <p className={css.userEmail}>{user?.username}</p>
             <button className={css.logoutButton} onClick={handleLogout}>
               Logout
             </button>
@@ -36,12 +36,14 @@ export default function AuthNavigation() {
         </>
       ) : (
         <>
-          <Link href="/sign-in" className={css.navigationLink}>
-            Login
-          </Link>
-          <Link href="/sign-up" className={css.navigationLink}>
-            Sign up
-          </Link>
+          <div className={css.authBlock}>
+            <Link href="/sign-in" className={css.navigationLink}>
+              Login
+            </Link>
+            <Link href="/sign-up" className={css.navigationLink}>
+              Sign up
+            </Link>
+          </div>
         </>
       )}
     </div>

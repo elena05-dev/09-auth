@@ -13,7 +13,7 @@ const TAGS: NoteTag[] = [
 
 export default function SidebarNotes() {
   return (
-    <>
+    <div className={css.sidebarContent}>
       <Link href="/notes/action/create" className={css.createButton}>
         Create note
       </Link>
@@ -24,12 +24,12 @@ export default function SidebarNotes() {
           return (
             <li key={tag} className={css.menuItem}>
               <Link href={href} className={css.menuLink}>
-                {tag}
+                <span>{tag}</span>
               </Link>
             </li>
           );
         })}
       </ul>
-    </>
+    </div>
   );
 }

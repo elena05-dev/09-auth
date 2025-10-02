@@ -10,28 +10,29 @@ type Draft = {
 
 type NoteStore = {
   draft: Draft;
-  setDraft: (note: Partial<Draft>) => void;
+  setDraft: (partial: Partial<Draft>) => void;
   clearDraft: () => void;
+
+  isFormOpen: boolean;
+  setIsFormOpen: (open: boolean) => void;
 };
 
-const initialDraft: Draft = {
-  title: '',
-  content: '',
-  tag: 'Todo',
-};
+const initialDraft: Draft = { title: '', content: '', tag: 'Todo' };
 
 export const useNoteStore = create<NoteStore>()(
   persist(
     (set) => ({
       draft: initialDraft,
       setDraft: (note) =>
-        set((state) => ({
-          draft: { ...state.draft, ...note },
-        })),
+        set((state) => ({ draft: { ...state.draft, ...note } })),
       clearDraft: () => set({ draft: initialDraft }),
+
+      // здесь добавляем флаг формы
+      isFormOpen: false,
+      setIsFormOpen: (open) => set({ isFormOpen: open }),
     }),
     {
-      name: 'note-draft',
+      name: 'note-draft', // ключ в localStorage
     },
   ),
 );

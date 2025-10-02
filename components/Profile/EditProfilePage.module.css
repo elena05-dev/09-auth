@@ -9,7 +9,7 @@
 .profileCard {
     max-width: 500px;
     width: 100%;
-    background-color: #ffffff;
+    background-color: #c8bca4;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     padding: 24px;
@@ -19,7 +19,7 @@
 .formTitle {
     font-size: 32px;
     font-weight: 700;
-    color: #1a1a1a;
+    color: #56280c;
     margin-bottom: 24px;
     text-align: left;
 }
@@ -33,7 +33,7 @@
 
 .profileInfo {
     font-size: 18px;
-    color: #333;
+    color: #56280c;
     display: flex;
     flex-direction: column;
     gap: 16px;
@@ -49,7 +49,7 @@
 .usernameWrapper label {
     font-weight: 600;
     margin-bottom: 8px;
-    color: #222;
+    color: #56280c;
 }
 
 .input {
@@ -62,7 +62,7 @@
 }
 
 .input:focus {
-    border-color: #0d6efd;
+    border-color: #D4BDB5;
     outline: none;
 }
 
@@ -75,7 +75,7 @@
     padding: 12px 24px;
     font-size: 18px;
     font-weight: 600;
-    background-color: #0d6efd;
+    background: linear-gradient(145deg, #845B4D, #A16F5E);
     color: white;
     border: none;
     border-radius: 8px;
@@ -86,23 +86,29 @@
 }
 
 .saveButton:hover {
-    background-color: #0b5ed7;
+    transform: translateY(-2px) scale(1.02);
+
+}
+
+.saveButton:active {
+    transform: translateY(1px) scale(0.98);
+
 }
 
 .cancelButton {
     padding: 8px 16px;
     font-size: 16px;
     background-color: transparent;
-    color: #6c757d;
-    border: 2px solid #6c757d;
+    color: #1e112f;
+    border: 2px solid #C3A398;
     border-radius: 8px;
     cursor: pointer;
     transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 .cancelButton:hover {
-    background-color: #6c757d;
-    color: white;
+    background-color: #a47f73;
+    color: rgb(224, 208, 196);
 }
 
 .actions {

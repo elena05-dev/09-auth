@@ -1,3 +1,23 @@
+.wrapper {
+    display: flex;
+    flex-direction: column;
+
+    min-height: 100vh;
+
+    color: #f2eff5;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sidebar {
+    display: none;
+    width: 250px;
+    height: 100vh;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 16px;
+    box-sizing: border-box;
+    flex-shrink: 0;
+}
+
 .menuList {
     list-style-type: none;
     margin: 0;
@@ -10,32 +30,92 @@
 
 .menuLink {
     text-decoration: none;
-    color: white;
-    font-size: 16px;
+    color: #2b1a2c;
+    font-size: 20px;
     display: block;
     padding: 8px 16px;
-    transition: background-color 0.3s ease;
+    transition: transform 0.1s ease, background-color 0.2s ease, color 0.2s ease;
+
+}
+
+.menuLink span {
+    display: inline-block;
+    transition: transform 0.1s ease;
 }
 
 .menuLink:hover {
-    background-color: #444;
-    color: #ddd;
 
+    border-radius: 6px;
+    color: #422843;
+    transform: translateY(2px);
 }
 
+
+
+/* кнопка Create */
 .createButton {
     display: inline-block;
     text-align: center;
     padding: 8px 16px;
-    background-color: #4f46e5;
-    color: white;
+    background: #6F8D77;
+    color: #f2eff5;
     border-radius: 6px;
     text-decoration: none;
+    font-size: 20px;
     font-weight: 500;
     margin-bottom: 16px;
-    transition: background-color 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4), inset 0 1px 2px rgba(255, 255, 255, 0.15);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
 .createButton:hover {
-    background-color: #3730a3;
+    transform: translateY(-2px) scale(1.02);
+    background: #475B4C;
+}
+
+.createButton:active {
+    transform: translateY(1px) scale(0.98);
+    background: #475B4C;
+    ;
+}
+
+.mainContent {
+    width: 100%;
+    /* занимает всю ширину на мобилке */
+    padding: 16px;
+    box-sizing: border-box;
+}
+
+/* =========================
+   Планшет и десктоп
+========================= */
+@media (min-width: 768px) {
+    .wrapper {
+        flex-direction: row;
+        /* горизонтально: сайдбар слева, контент справа */
+    }
+
+    .sidebar {
+        display: block;
+        /* показываем сайдбар */
+        position: fixed;
+        /* фиксируем слева */
+        top: 0;
+        left: 0;
+        height: 100vh;
+
+    }
+
+    .sidebarContent {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding-top: 50px;
+    }
+
+    .mainContent {
+        margin-left: 250px;
+        /* сдвигаем контент вправо под сайдбар */
+    }
 }

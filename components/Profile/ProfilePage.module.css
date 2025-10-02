@@ -9,7 +9,7 @@
 .profileCard {
     max-width: 500px;
     width: 100%;
-    background-color: #ffffff;
+    background-color: #c8bca4;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     padding: 24px;
@@ -19,7 +19,7 @@
 .formTitle {
     font-size: 32px;
     font-weight: 700;
-    color: #1a1a1a;
+    color: #55210f;
     margin-bottom: 24px;
     text-align: left;
 }
@@ -31,13 +31,13 @@
 }
 
 .avatar {
-    border-radius: 50%;
+    fill: #55210f;
     object-fit: cover;
 }
 
 .profileInfo {
     font-size: 18px;
-    color: #333;
+    color: #55210f;
     display: flex;
     flex-direction: column;
     gap: 8px;
@@ -62,7 +62,7 @@
     padding: 8px 16px;
     font-size: 16px;
     font-weight: 600;
-    background-color: #0d6efd;
+    background: #8b764a;
     color: white;
     border-radius: 6px;
     text-decoration: none;
@@ -71,5 +71,11 @@
 }
 
 .editProfileButton:hover {
-    background-color: #0b5ed7;
+    transform: translateY(-2px) scale(1.02);
+
+}
+
+.editProfileButton:active {
+    transform: translateY(1px) scale(0.98);
+
 }

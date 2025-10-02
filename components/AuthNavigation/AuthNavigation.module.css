@@ -1,40 +1,118 @@
+/* =========================
+   Mobile-first (до 768px)
+========================= */
+
 .userEmail {
-    color: white;
-    margin-right: 0.5rem;
-    font-size: 0.9rem;
+    color: #A15E8C;
+    font-size: 18px;
+    font-family: var(--font-agbalumo);
+    padding-bottom: 6px;
+}
+
+.userBlock {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
 }
 
 .logoutButton {
     background: transparent;
-    border: 1px solid white;
-    color: white;
+    border: none;
+    color: #5B4756;
     padding: 0.3rem 0.6rem;
-    border-radius: 4px;
+
     cursor: pointer;
     font-size: 0.9rem;
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .logoutButton:hover {
-    background-color: white;
-    color: #333;
+
+    color: #382b3d;
 }
 
 .navigationItem {
     display: flex;
+    flex-direction: column;
+    /* мобилка - колонка */
     align-items: center;
+    justify-content: center;
 }
 
 .navigationLink {
     text-decoration: none;
-    color: white;
+    color: #5B4756;
     font-size: 1rem;
+    text-align: center;
 }
 
 .navigationLink:hover {
-    color: #ddd;
+    color: #382b3d;
 }
 
 .navigationList {
     display: flex;
+    flex-direction: column;
+    /* мобилка - колонка */
+    gap: 1rem;
+}
+
+.authBlock {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.authContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+
+}
+
+/* =========================
+   Планшет и десктоп (min-width: 768px)
+========================= */
+@media (min-width: 768px) {
+
+    .userBlock {
+        flex-direction: row;
+
+        align-items: center;
+        gap: 0.5rem;
+
+    }
+
+    .navigationItem {
+        flex-direction: row;
+        align-items: center;
+
+    }
+
+    .navigationList {
+        flex-direction: row;
+
+        gap: 1rem;
+    }
+
+    .authBlock {
+        flex-direction: row;
+
+        gap: 1rem;
+        align-items: center;
+    }
+
+    .authContainer {
+
+        flex-direction: row;
+
+        align-items: center;
+        gap: 1rem;
+
+    }
+
+
 }

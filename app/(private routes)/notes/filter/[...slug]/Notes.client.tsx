@@ -57,7 +57,7 @@ export default function NotesClient({
       <header className={css.toolbar}>
         <SearchBox value={search} onChange={handleSearchChange} />
         <Link href="/notes/action/create" className={css.button}>
-          Create note +
+          Create note
         </Link>
       </header>
 

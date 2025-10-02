@@ -1,16 +1,15 @@
-body {
+body,
+html {
 
   color: var(--foreground);
   background: var(--background);
-  font-family: var(--font-roboto), sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-family: "Lora", serif;
   display: flex;
   flex-direction: column;
   height: 100%;
 
   margin: 0;
-  background-color: #f8f9fa;
+  background: #D1C8B8;
 
 
 }
